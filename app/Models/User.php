@@ -50,4 +50,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+    public function convocation() 
+    {
+        return $this->belongsToMany(Convocation::class, 'user_convocation', 'convocation_id', 'user_id');
+    }
 }
