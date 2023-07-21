@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class
         ]);
         \App\Models\User::factory(10)->create();
+        \App\Models\Program::factory(4)->create();
+
+        \App\Models\Convocation::factory(4)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
