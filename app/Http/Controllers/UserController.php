@@ -86,4 +86,20 @@ class UserController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    public function getAllUsers()
+    {
+        try {
+            $user = User::get();
+            return response()->json([
+                'message' => 'Services retrieved',
+                'data' => $user
+            ], Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            Log::error('Error getting services ' .
+                $th->getMessage());
+            return response()->json([
+                'message' => 'Error retrieving services'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
