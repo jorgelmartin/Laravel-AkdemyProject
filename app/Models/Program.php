@@ -10,7 +10,7 @@ class Program extends Model
     use HasFactory;
     protected $fillable = [
         'name', 
-        'description', 
+        'beginning', 
         'price'
     ];
     public function convocation() {
