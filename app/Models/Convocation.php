@@ -11,11 +11,12 @@ class Convocation extends Model
     protected $fillable = [
         'user_id',
         'program_id',
-        'description'
+        'beginning',
+        'end'
     ];
     
     public function user() {
-        return $this->belongsToMany(User::class, 'user_convocation', 'convocation_id', 'user_id');
+        return $this->belongsToMany(User::class, 'user_convocation', 'user_id', 'convocation_id');
     }
     public function program() {
         return $this->belongsTo(Program::class);

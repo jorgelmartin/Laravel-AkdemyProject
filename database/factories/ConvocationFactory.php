@@ -21,7 +21,8 @@ class ConvocationFactory extends Factory
         return [
             'user_id' => User::factory(),
             'program_id' => Program::factory(),
-            'description'=>fake()->paragraph(),
+            'beginning'=>fake()->date($format = 'Y-m-d', $max = 'now'),
+            'end'=>fake()->date($format = 'Y-m-d', $max = 'now'),
             'status'=>false
         ];
     }
