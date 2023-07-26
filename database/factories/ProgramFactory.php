@@ -17,8 +17,6 @@ class ProgramFactory extends Factory
     public function definition(): array
     {
         return [
-            //
-            // 'name' => fake()->word(),
             'name' => fake()->randomElement($array = array ('ciberseguridad','python','php', 'javascript')),
             'description'=>fake()->paragraph(),
             'price' => fake()->randomDigit(),

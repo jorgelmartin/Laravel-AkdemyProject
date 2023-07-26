@@ -91,14 +91,14 @@ class UserController extends Controller
         try {
             $user = User::get();
             return response()->json([
-                'message' => 'Services retrieved',
+                'message' => 'Users retrieved',
                 'data' => $user
             ], Response::HTTP_OK);
         } catch (\Throwable $th) {
-            Log::error('Error getting services ' .
+            Log::error('Error getting users ' .
                 $th->getMessage());
             return response()->json([
-                'message' => 'Error retrieving services'
+                'message' => 'Error retrieving users'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

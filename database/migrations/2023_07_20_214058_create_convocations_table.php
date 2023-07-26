@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('convocations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('program_id');
-            $table->string('description');
+            $table->date('beginning');
+            $table->string('schedule');
             $table->boolean('status')->default(false);
             
-            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('program_id')->references('id')->on('programs');
             
             $table->timestamps();
