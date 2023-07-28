@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Convocation;
 use App\Models\User;
 use App\Models\Program;
+use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -14,9 +15,120 @@ class ConvocationController extends Controller
 {
     //
     public function getAllConvocations()
+    {
+        try {
+            $convocation = Convocation::with(['user', 'program'])->get();
+            return response()->json([
+                'message' => 'Convocations retrieved',
+                'data' => $convocation
+            ], Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            Log::error('Error getting convocations: ' . $th->getMessage());
+            return response()->json([
+                'message' => 'Error retrieving convocations'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function createConvocations(Request $request)
 {
     try {
-        $convocation = Convocation::with(['user', 'program'])->get();
+        // Verificar si el usuario tiene el rol de administrador (role: 1)
+        if (auth()->user()->role_id !== 1) {
+            return response()->json(['message' => 'No tienes permiso para crear convocatorias'], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'program_id' => 'required',
+            'beginning' => 'required',
+            'schedule' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $validData = $validator->validated();
+
+        // Convertir el campo "beginning" a formato de fecha válido
+        $beginning = Carbon::parse($validData['beginning'])->toDateTimeString();
+
+        $convocation = Convocation::create([
+            'program_id' => $validData['program_id'],
+            'beginning' => $beginning,
+            'schedule' => $validData['schedule']
+        ]);
+
+        return response()->json([
+            'message' => 'Convocatoria creada',
+            'data' => $convocation
+        ]);
+    } catch (\Throwable $th) {
+        Log::error('Error al crear la convocatoria ' . $th->getMessage());
+
+        return response()->json([
+            'message' => 'Error al crear la convocatoria'
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
+
+//UPDATE CONVOCATIONS
+public function updateConvocations(Request $request, $convocationId)
+{
+    try {
+        // Verificar si el usuario tiene el rol de administrador (role: 1)
+        if (auth()->user()->role_id !== 1) {
+            return response()->json(['message' => 'No tienes permiso para actualizar convocatorias'], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'program_id' => 'required',
+            'beginning' => 'required',
+            'schedule' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $validData = $validator->validated();
+
+        // Convertir la fecha al formato deseado utilizando Carbon
+        $beginning = Carbon::parse($validData['beginning'])->toDateTimeString();
+
+        // Buscar la convocatoria existente por su ID
+        $convocation = Convocation::findOrFail($convocationId);
+
+        // Actualizar los datos de la convocatoria
+        $convocation->update([
+            'program_id' => $validData['program_id'],
+            'beginning' => $beginning,
+            'schedule' => $validData['schedule']
+        ]);
+
+        return response()->json([
+            'message' => 'Convocation updated',
+            'data' => $convocation
+        ]);
+    } catch (\Throwable $th) {
+        Log::error('Error updating convocation ' . $th->getMessage());
+
+        return response()->json([
+            'message' => 'Error updating convocation'
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
+
+//GET ACTUAL CONVOCATION
+public function getAllActualConvocations()
+{
+    try {
+        // Filtrar las convocatorias cuya fecha de inicio aún no ha pasado
+        $currentDate = Carbon::now();
+        $convocation = Convocation::with(['user', 'program'])
+            ->where('beginning', '>', $currentDate)
+            ->get();
+
         return response()->json([
             'message' => 'Convocations retrieved',
             'data' => $convocation
@@ -28,121 +140,55 @@ class ConvocationController extends Controller
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
-    // public function createConvocation(Request $request)
-    // {
-    //     try {
-    //         $validator = Validator::make($request->all(), [
-    //             'program_id' => 'required',
-    //             'beginning' => 'required',
-    //             'schedule' => 'required'
-    //         ]);
 
-    //         if ($validator->fails()) {
-    //             return response()->json($validator->errors(), 400);
-    //         }
 
-    //         $validData = $validator->validated();
+public function joinConvocation(Request $request)
+{
+    try {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required'
+        ]);
 
-    //         $userId = auth()->user()->id;
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
-    //         $convocation = Convocation::create([
-    //             'program_id' => $validData['program_id'],
-    //             'beginning' => $validData['beginning'],
-    //             'schedule' => $validData['schedule']
-    //         ]);
+        $validData = $validator->validated();
+        $userId = auth()->user()->id;
+        $convocation = Convocation::find($validData['id']);
+        if ($convocation === null) {
+            return response()->json([
+                'message' => 'Convocation not found'
+            ], Response::HTTP_NOT_FOUND);
+        }
+        // Verificar si el usuario ya está unido a la convocatoria.
+        $existingUser = $convocation->user->find($userId);
+        if ($existingUser) {
+            if ($existingUser->pivot->pending) {
+                return response()->json([
+                    'message' => 'User already has a pending join request for the convocation'
+                ], Response::HTTP_BAD_REQUEST);
+            } else {
+                return response()->json([
+                    'message' => 'User is already joined to the convocation'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
 
-    //         $convocation->user()->attach($userId, ['owner' => true]);
+        // Agregar una solicitud pendiente para unir al usuario a la convocatoria.
+        $convocation->user()->attach($userId, ['pending' => true]);
 
-    //         return response()->json([
-    //             'message' => 'Convocation created',
-    //             'data' => $convocation
-    //         ]);
-    //     } catch (\Throwable $th) {
-    //         Log::error('Error creating task ' . $th->getMessage());
-
-    //         return response()->json([
-    //             'message' => 'Error creating task'
-    //         ], Response::HTTP_INTERNAL_SERVER_ERROR);
-    //     }
-    // }
-//     public function updateConvocation(Request $request, $convocationId)
-// {
-//     try {
-//         $validator = Validator::make($request->all(), [
-//             'program_id' => 'required',
-//             'beginning' => 'required',
-//             'end' => 'required'
-//         ]);
-
-//         if ($validator->fails()) {
-//             return response()->json($validator->errors(), 400);
-//         }
-
-//         $validData = $validator->validated();
-
-//         // Buscar la convocatoria existente por su ID
-//         $convocation = Convocation::findOrFail($convocationId);
-
-//         // Actualizar los datos de la convocatoria
-//         $convocation->update([
-//             'program_id' => $validData['program_id'],
-//             'beginning' => $validData['beginning'],
-//             'end' => $validData['end']
-//         ]);
-
-//         // Si se desea cambiar el dueño (owner) de la convocatoria, se puede hacer aquí.
-//         // Por ejemplo, si se necesita transferir la propiedad al usuario actualmente autenticado.
-//         // Para esto, se pueden agregar líneas similares a las que se usaron en el método createConvocation.
-
-//         return response()->json([
-//             'message' => 'Convocation updated',
-//             'data' => $convocation
-//         ]);
-//     } catch (\Throwable $th) {
-//         Log::error('Error updating task ' . $th->getMessage());
-
-//         return response()->json([
-//             'message' => 'Error updating task'
-//         ], Response::HTTP_INTERNAL_SERVER_ERROR);
-//     }
-// }
-    // public function joinConvocation(Request $request)
-    // {
-    //     try {
-    //         $validator = Validator::make($request->all(), [
-    //             'id' => 'required'
-    //         ]);
-
-    //         if ($validator->fails()) {
-    //             return response()->json($validator->errors(), 400);
-    //         }
-
-    //         $validData = $validator->validated();
-    //         $userId = auth()->user()->id;
-    //         $convocation = Convocation::find($validData['id']);
-
-    //         // Verificar si el usuario ya está unido a la tarea.
-    //         if ($convocation->user->contains($userId)) {
-    //             return response()->json([
-    //                 'message' => 'User is already joined to the convocation'
-    //             ], Response::HTTP_BAD_REQUEST);
-    //         }
-
-    //         // En lugar de unir directamente al usuario, se puede agregar una solicitud pendiente.
-    //         // Esto requerirá un campo adicional en la tabla pivot, por ejemplo, 'pending' que indica si la solicitud está pendiente o aprobada.
-    //         $convocation->user()->attach($userId, ['owner' => false, 'pending' => true]);
-
-    //         return response()->json([
-    //             'message' => 'Convocation join request sent',
-    //             'data' => $convocation
-    //         ]);
-    //     } catch (\Throwable $th) {
-    //         Log::error('Error joining convocation ' . $th->getMessage());
-    //         return response()->json([
-    //             'message' => 'Error joining task'
-    //         ], Response::HTTP_INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+        return response()->json([
+            'message' => 'Convocation join request sent',
+            'data' => $convocation
+        ]);
+    } catch (\Throwable $th) {
+        Log::error('Error joining convocation ' . $th->getMessage());
+        return response()->json([
+            'message' => 'Error joining convocation'
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
 };
 // User
 // es posible que el usuario solicite unirse a la tarea y sea el admin quien apruebe al alumno entra en multitask? 

@@ -23,7 +23,8 @@ class User extends Authenticatable
         'surname',
         'email',
         'password',
-        'role_id'
+        'role_id',
+        'convocation_id'
     ];
 
     /**
@@ -53,6 +54,7 @@ class User extends Authenticatable
     }
     public function convocation() 
     {
-        return $this->belongsToMany(Convocation::class, 'user_convocation', 'convocation_id', 'user_id');
+        return $this->belongsToMany(Convocation::class, 'user_convocation', 'user_id', 'convocation_id');
+        // return $this->belongsTo(Convocation::class, 'convocation_id' );
     }
 }

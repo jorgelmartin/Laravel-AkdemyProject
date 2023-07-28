@@ -22,7 +22,8 @@ class ConvocationFactory extends Factory
             'program_id' => Program::factory(),
             'beginning'=>fake()->date($format = 'Y-m-d', $max = 'now'),
             'schedule'=>fake()->randomElement(['Mañanas 09:00-14:00', 'Tardes 15:00-20:00']),
-            'status'=>false
+            // 'user_id' => User::factory(),
+            // 'status'=>false
         ];
     }
 }
