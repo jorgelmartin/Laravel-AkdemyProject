@@ -15,11 +15,20 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('convocation_id');
             $table->unsignedBigInteger('user_id');
-            $table->boolean('status')->default(false);
-
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('convocation_id')->references('id')->on('convocations');
+            $table->boolean('status')->default();
             $table->timestamps();
+    
+            $table->foreign('convocation_id')
+                ->references('id')
+                ->on('convocations')
+                ->onDelete('cascade') 
+                ->onUpdate('cascade'); 
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade') 
+                ->onUpdate('cascade'); 
         });
     }
 

@@ -13,17 +13,26 @@ return new class extends Migration
     {
         Schema::create('convocations', function (Blueprint $table) {
             $table->id();
+            // $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('program_id');
             $table->date('beginning');
             $table->string('schedule');
-            $table->boolean('status')->default(false);
-            
-            $table->foreign('program_id')->references('id')->on('programs');
-            
+
+            $table->foreign('program_id')
+                ->references('id')
+                ->on('programs')
+                ->onDelete('cascade') 
+                ->onUpdate('cascade');
+
+        //  $table->foreign('user_id')
+        //         ->references('id')
+        //         ->on('users')
+        //         ->onDelete('cascade') 
+        //         ->onUpdate('cascade');
+
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

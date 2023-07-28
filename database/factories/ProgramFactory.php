@@ -16,9 +16,11 @@ class ProgramFactory extends Factory
      */
     public function definition(): array
     {
+        static $programNames = ['ciberseguridad', 'python', 'php', 'javascript'];
+
         return [
-            'name' => fake()->randomElement($array = array ('ciberseguridad','python','php', 'javascript')),
-            'description'=>fake()->paragraph(),
+            'name' => fake()->randomElement($programNames),
+            'description' => fake()->paragraph(),
             'price' => fake()->randomDigit(),
             // 'pdf' => fake()->randomElement($array = array ('ciberseguridad','python','php', 'javascript')),
         ];

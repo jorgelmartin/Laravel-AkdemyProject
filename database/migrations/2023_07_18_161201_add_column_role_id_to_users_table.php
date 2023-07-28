@@ -15,6 +15,14 @@ return new class extends Migration
             $table->string('surname')->after('name');
             $table->unsignedBigInteger('role_id')->after('password');
             $table->foreign('role_id')->references('id')->on('roles');
+
+            // $table->unsignedBigInteger('convocation_id')->after('role_id');
+
+            // $table->foreign('convocation_id')
+            //     ->references('id')
+            //     ->on('convocations')
+            //     ->onDelete('cascade') 
+            //     ->onUpdate('cascade');
         });
     }
 

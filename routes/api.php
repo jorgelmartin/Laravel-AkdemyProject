@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConvocationController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserConvocationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,14 +27,18 @@ Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:san
 
 //CONVOCATION CONTROLLER
 Route::get('/convocation/getAll', [ConvocationController::class, 'getAllConvocations']);
-Route::post('/convocation/create', [ConvocationController::class, 'createConvocations']);
-Route::put('/convocation/update', [ConvocationController::class, 'updateConvocations'])->middleware(['auth:sanctum', 'isAdmin']);
+Route::post('/convocation/create', [ConvocationController::class, 'createConvocations'])->middleware(['auth:sanctum', 'isAdmin']);
+Route::put('/convocation/update/{id}', [ConvocationController::class, 'updateConvocations'])->middleware(['auth:sanctum', 'isAdmin']);
+Route::post('/convocation/join', [ConvocationController::class, 'joinConvocation']);
 
 //USER CONTROLLER
 Route::delete('/user/delete', [UserController::class, 'deleteMyAccount'])->middleware('auth:sanctum');
 Route::post('/user/{id}', [UserController::class, 'restoreAccount']);
 Route::put('/user/update', [UserController::class, 'updateProfile'])->middleware('auth:sanctum');
 Route::get('/user/getAll', [UserController::class, 'getAllUsers'])->middleware(['auth:sanctum', 'isAdmin']);
+
+//USER CONVOCATION CONTROLLER
+Route::post('/userConvo/create', [UserConvocationController::class, 'createUserConvocations'])->middleware('auth:sanctum');
 
 //PROGRAMS CONTROLLER
 Route::get('/program/getAll', [ProgramController::class, 'getAllPrograms']);
