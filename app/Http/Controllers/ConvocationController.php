@@ -119,27 +119,27 @@ public function updateConvocations(Request $request, $convocationId)
     }
 }
 
-//GET ACTUAL CONVOCATION
-public function getAllActualConvocations()
-{
-    try {
-        // Filtrar las convocatorias cuya fecha de inicio aún no ha pasado
-        $currentDate = Carbon::now();
-        $convocation = Convocation::with(['user', 'program'])
-            ->where('beginning', '>', $currentDate)
-            ->get();
+// //GET ACTUAL CONVOCATION
+// public function getAllActualConvocations()
+// {
+//     try {
+//         // Filtrar las convocatorias cuya fecha de inicio aún no ha pasado
+//         $currentDate = Carbon::now();
+//         $convocation = Convocation::with(['user', 'program'])
+//             ->where('beginning', '>', $currentDate)
+//             ->get();
 
-        return response()->json([
-            'message' => 'Convocations retrieved',
-            'data' => $convocation
-        ], Response::HTTP_OK);
-    } catch (\Throwable $th) {
-        Log::error('Error getting convocations: ' . $th->getMessage());
-        return response()->json([
-            'message' => 'Error retrieving convocations'
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
-    }
-}
+//         return response()->json([
+//             'message' => 'Convocations retrieved',
+//             'data' => $convocation
+//         ], Response::HTTP_OK);
+//     } catch (\Throwable $th) {
+//         Log::error('Error getting convocations: ' . $th->getMessage());
+//         return response()->json([
+//             'message' => 'Error retrieving convocations'
+//         ], Response::HTTP_INTERNAL_SERVER_ERROR);
+//     }
+// }
 
 
 public function joinConvocation(Request $request)
