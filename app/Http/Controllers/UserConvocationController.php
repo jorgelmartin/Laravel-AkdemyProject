@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RequestCreated;
 use App\Models\Convocation;
 use App\Models\Program;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,15 +35,20 @@ class UserConvocationController extends Controller
 
             // Crear el registro en la tabla intermedia con 'status' establecido en 'false'
             $user->convocation()->attach($convocationId, ['status' => false]);
+            // Enviar el correo electrónico
+        // Mail::to($user->email)->send(new RequestCreated($user->name, $convocationId));
+        // Enviar el correo electrónico
+        Mail::to($user->email)->send(new RequestCreated($user->name, $convocationId));
+
 
             return response()->json([
-                'message' => 'Convocatoria creada'
+                'message' => 'Solicitud creada'
             ]);
         } catch (\Throwable $th) {
-            Log::error('Error al crear la convocatoria ' . $th->getMessage());
+            Log::error('Error al crear la solicitud ' . $th->getMessage());
 
             return response()->json([
-                'message' => 'Error al crear la convocatoria'
+                'message' => 'Error al crear la solicitud'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

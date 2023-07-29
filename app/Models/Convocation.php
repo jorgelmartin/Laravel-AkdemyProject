@@ -16,7 +16,7 @@ class Convocation extends Model
     ];
     
     public function user() {
-        return $this->belongsToMany(User::class, 'user_convocation', 'user_id', 'convocation_id');
+        return $this->belongsToMany(User::class, 'user_convocation', 'convocation_id', 'user_id');
         // return $this->belongsTo(User::class, 'user_id' );
     }
     public function program() {
