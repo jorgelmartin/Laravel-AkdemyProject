@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RequestAccepted;
 use App\Mail\RequestCreated;
 use App\Models\Convocation;
 use App\Models\Program;
@@ -33,13 +34,20 @@ class UserConvocationController extends Controller
             $user = User::findOrFail($validData['user_id']);
             $convocationId = $validData['convocation_id'];
 
+            // Verificar si ya existe una relación entre el usuario y la convocatoria
+        $existingRelation = $user->convocation()->where('convocation_id', $convocationId)->exists();
+
+        if ($existingRelation) {
+            return response()->json([
+                'message' => 'El usuario ya tiene una solicitud creada para esta convocatoria'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
             // Crear el registro en la tabla intermedia con 'status' establecido en 'false'
             $user->convocation()->attach($convocationId, ['status' => false]);
-            // Enviar el correo electrónico
-        // Mail::to($user->email)->send(new RequestCreated($user->name, $convocationId));
-        // Enviar el correo electrónico
-        Mail::to($user->email)->send(new RequestCreated($user->name, $convocationId));
 
+            // Enviar el correo electrónico
+            Mail::to($user->email)->send(new RequestCreated($user->name, $convocationId));
 
             return response()->json([
                 'message' => 'Solicitud creada'
@@ -52,6 +60,7 @@ class UserConvocationController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     public function acceptUserRequest(Request $request, $requestId)
     {
         try {
@@ -71,13 +80,15 @@ class UserConvocationController extends Controller
                 ->where('id', $requestId)
                 ->update(['status' => true]);
 
+
+                $user = User::find($convocationRequest->user_id);
+        Mail::to($user->email)->send(new RequestAccepted());
             // Aquí podrías realizar otras acciones adicionales relacionadas con la aceptación de la solicitud,
             // como notificar al usuario, enviar correos, etc.
 
             return response()->json([
                 'message' => 'Solicitud de convocatoria aceptada exitosamente'
             ], Response::HTTP_OK);
-
         } catch (\Throwable $th) {
             Log::error('Error al aceptar la solicitud de convocatoria: ' . $th->getMessage());
 
@@ -89,79 +100,78 @@ class UserConvocationController extends Controller
 
     //GET PENDING CONVOCATION REQUEST
     public function getPendingUserRequests(Request $request)
-{
-    try {
-        // Obtener todas las solicitudes pendientes (status = false) de la tabla intermedia
-        $pendingRequests = DB::table('user_convocation')
-            ->where('status', false)
-            ->get();
+    {
+        try {
+            // Obtener todas las solicitudes pendientes (status = false) de la tabla intermedia
+            $pendingRequests = DB::table('user_convocation')
+                ->where('status', false)
+                ->get();
 
-        // Obtener la información de los usuarios y convocatorias relacionadas
-        $requestsData = [];
-        foreach ($pendingRequests as $request) {
-            $user = User::find($request->user_id);
-            $convocation = Convocation::find($request->convocation_id);
+            // Obtener la información de los usuarios y convocatorias relacionadas
+            $requestsData = [];
+            foreach ($pendingRequests as $request) {
+                $user = User::find($request->user_id);
+                $convocation = Convocation::find($request->convocation_id);
 
-            if ($user && $convocation) {
-                // Obtener el programa relacionado con la convocatoria
-                $program = Program::find($convocation->program_id);
+                if ($user && $convocation) {
+                    // Obtener el programa relacionado con la convocatoria
+                    $program = Program::find($convocation->program_id);
 
-                $requestsData[] = [
-                    'id' => $request->id,
-                    'status' => $request->status,
-                    'user' => $user,
-                    'convocation' => $convocation,
-                    'program' => $program,
-                ];
+                    $requestsData[] = [
+                        'id' => $request->id,
+                        'status' => $request->status,
+                        'user' => $user,
+                        'convocation' => $convocation,
+                        'program' => $program,
+                    ];
+                }
             }
+            return response()->json($requestsData);
+        } catch (\Throwable $th) {
+            Log::error('Error al obtener las solicitudes de convocatoria pendientes: ' . $th->getMessage());
+
+            return response()->json([
+                'message' => 'Error al obtener las solicitudes de convocatoria pendientes'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return response()->json($requestsData);
-    } catch (\Throwable $th) {
-        Log::error('Error al obtener las solicitudes de convocatoria pendientes: ' . $th->getMessage());
-
-        return response()->json([
-            'message' => 'Error al obtener las solicitudes de convocatoria pendientes'
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-}
 
-public function getMyAcceptedUserRequests(Request $request, $userId)
-{
-    try {
-        // Obtener todas las solicitudes aceptadas (status = true) de la tabla intermedia para el ID de usuario dado
-        $acceptedRequests = DB::table('user_convocation')
-            ->where('status', true)
-            ->where('user_id', $userId)
-            ->get();
+    public function getMyAcceptedUserRequests(Request $request, $userId)
+    {
+        try {
+            // Obtener todas las solicitudes aceptadas (status = true) de la tabla intermedia para el ID de usuario dado
+            $acceptedRequests = DB::table('user_convocation')
+                ->where('status', true)
+                ->where('user_id', $userId)
+                ->get();
 
-        // Obtener la información de los usuarios, convocatorias y programas relacionados
-        $requestsData = [];
-        foreach ($acceptedRequests as $request) {
-            $user = User::find($request->user_id);
-            $convocation = Convocation::find($request->convocation_id);
+            // Obtener la información de los usuarios, convocatorias y programas relacionados
+            $requestsData = [];
+            foreach ($acceptedRequests as $request) {
+                $user = User::find($request->user_id);
+                $convocation = Convocation::find($request->convocation_id);
 
-            if ($user && $convocation) {
-                // Obtener el programa relacionado con la convocatoria
-                $program = Program::find($convocation->program_id);
+                if ($user && $convocation) {
+                    // Obtener el programa relacionado con la convocatoria
+                    $program = Program::find($convocation->program_id);
 
-                $requestsData[] = [
-                    'id' => $request->id,
-                    'status' => $request->status,
-                    'user' => $user,
-                    'convocation' => $convocation,
-                    'program' => $program,
-                ];
+                    $requestsData[] = [
+                        'id' => $request->id,
+                        'status' => $request->status,
+                        'user' => $user,
+                        'convocation' => $convocation,
+                        'program' => $program,
+                    ];
+                }
             }
+
+            return response()->json($requestsData);
+        } catch (\Throwable $th) {
+            Log::error('Error al obtener las solicitudes de convocatoria aceptadas para el usuario ' . $userId . ': ' . $th->getMessage());
+
+            return response()->json([
+                'message' => 'Error al obtener las solicitudes de convocatoria aceptadas para el usuario ' . $userId
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return response()->json($requestsData);
-    } catch (\Throwable $th) {
-        Log::error('Error al obtener las solicitudes de convocatoria aceptadas para el usuario ' . $userId . ': ' . $th->getMessage());
-
-        return response()->json([
-            'message' => 'Error al obtener las solicitudes de convocatoria aceptadas para el usuario ' . $userId
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-}
-
 }
