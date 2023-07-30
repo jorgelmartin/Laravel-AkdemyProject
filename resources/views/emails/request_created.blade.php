@@ -26,14 +26,3 @@
     <p>Teléfono de contacto: +34-911 111 111</p>
 </body>
 </html>
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Solicitud creada Created</title>
-</head>
-<body>
-    <h1>Hola, {{ $userName }}!</h1>
-    <p>Your convocation with ID {{ $convocationId }} has been created.</p>
-</body>
-</html> -->
