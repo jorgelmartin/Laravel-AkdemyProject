@@ -18,4 +18,4 @@ class PdfController extends Controller
 
         return $pdf->download('Curso_de_Python.pdf');
     }
-} -->
+} >
