@@ -11,7 +11,8 @@ class Program extends Model
     protected $fillable = [
         'name', 
         'beginning', 
-        'price'
+        'price',
+        'images'
     ];
     public function convocation() {
         return $this->belongsTo(Convocation::class);
