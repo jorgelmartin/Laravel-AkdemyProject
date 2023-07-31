@@ -8,7 +8,7 @@
 
 </div>
 
-### Sobre el proyecto
+### Sobre el proyecto:
 
 El proyecto Akdemy es una aplicación que ofrece diferentes programas y convocatorias a sus usuarios. Los usuarios pueden registrarse en la academia y acceder a una variedad de funcionalidades según su rol. Los administradores tienen privilegios adicionales para gestionar convocatorias y solicitudes de inscripción.
 
@@ -23,14 +23,15 @@ En resumen, Akdemy ofrece a sus usuarios la posibilidad de aprovechar al máximo
 
 !['diagrama'](./public/images/diagram.png)
 
-### Instalación en local
+### Instalación en local:
+
 1. Clona el repositorio `$git clone 'url-repository'`
 2. Instala las dependencias `composer install`
 3. Crea el archivo `.env` y configura la base de datos
 4. Ejecuta las migraciones y seeders `php artisan migrate` `php artisan db:seed`
 5. Conectamos el servidor`php artisan serve`
 
-### Endpoints
+### Endpoints:
 
 #### Autenticación
 
@@ -60,3 +61,10 @@ En resumen, Akdemy ofrece a sus usuarios la posibilidad de aprovechar al máximo
 #### Programas
 
 * GET - Ver todos los programas.
+
+### Agradecimientos:
+
+Agradezco a todos mis profesores y compañeros el tiempo dedicado a este proyecto.
+
+### Autor:
+Jorge Luis Martin Lorenzo.
