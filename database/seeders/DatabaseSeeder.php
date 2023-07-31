@@ -15,11 +15,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class
         ]);
+        $this->call([
+            ProgramSeeder::class
+        ]);
+        $this->call([
+            ConvocationSeeder::class
+        ]);
         \App\Models\User::factory(10)->create();
-        \App\Models\Program::factory()->create();  
-
-        \App\Models\Convocation::factory(3)->create();
-        
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
