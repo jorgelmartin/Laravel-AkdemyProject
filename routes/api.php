@@ -27,7 +27,6 @@ Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:san
 Route::get('/convocation/getAll', [ConvocationController::class, 'getAllConvocations']);
 Route::post('/convocation/create', [ConvocationController::class, 'createConvocations'])->middleware(['auth:sanctum', 'isAdmin']);
 Route::put('/convocation/update/{id}', [ConvocationController::class, 'updateConvocations'])->middleware(['auth:sanctum', 'isAdmin']);
-Route::post('/convocation/join', [ConvocationController::class, 'joinConvocation']);
 
 //USER CONTROLLER
 Route::delete('/user/delete', [UserController::class, 'deleteMyAccount'])->middleware('auth:sanctum');
@@ -40,6 +39,7 @@ Route::post('/userConvo/create', [UserConvocationController::class, 'createUserC
 Route::get('/userConvo/getPending', [UserConvocationController::class, 'getPendingUserRequests'])->middleware(['auth:sanctum', 'isAdmin']);
 Route::post('/userConvo/accept/{id}', [UserConvocationController::class, 'acceptUserRequest'])->middleware(['auth:sanctum', 'isAdmin']);
 Route::get('/userConvo/getAccepted/{userId}', [UserConvocationController::class, 'getMyAcceptedUserRequests'])->middleware(['auth:sanctum']);
+// Route::post('/convocation/join', [ConvocationController::class, 'joinConvocation']);
 
 //PROGRAMS CONTROLLER
 Route::get('/program/getAll', [ProgramController::class, 'getAllPrograms']);
