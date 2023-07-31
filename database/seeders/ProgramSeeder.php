@@ -25,7 +25,7 @@ class ProgramSeeder extends Seeder
             'name' => 'PHP',
             'description' => 'Descubre el poder de PHP, el corazón de las aplicaciones web modernas. Con PHP, podrás construir servidores robustos y escalables, gestionando datos y lógica de forma eficiente. Desde manejar bases de datos hasta crear APIs sólidas, PHP te brinda el control total sobre la funcionalidad y rendimiento de tus aplicaciones. Únete a nuestra formación especializada y desbloquea todo el potencial de PHP para llevar tus habilidades en el backend al siguiente nivel. ¡Prepárate para crear una experiencia web excepcional!',
             'price' => '550',
-            'image' => 'images/php1.png',
+            'image' => 'images/php.png',
         ],
         [
             'name' => 'Python',
@@ -37,7 +37,7 @@ class ProgramSeeder extends Seeder
             'name' => 'Ciberseguridad',
             'description' => 'Sumérgete en el apasionante mundo de la ciberseguridad, donde la protección y defensa de datos se convierte en una misión crucial. Descubre técnicas de vanguardia para salvaguardar sistemas y redes contra amenazas cibernéticas. Conviértete en un guardián digital experto, protegiendo información valiosa y manteniendo a salvo el mundo conectado. ¡Únete a nuestra academia y prepárate para defender con éxito el futuro digital!',
             'price' => '700',
-            'image' => 'images/ciber1.png',
+            'image' => 'images/ciber.png',
         ],
         [
             'name' => 'React',
