@@ -17,7 +17,7 @@ class ProgramSeeder extends Seeder
         DB::table('programs')->insert([
         [
             'name' => 'Javascript',
-            'surname' => 'Adéntrate en el dinámico mundo de JavaScript, con su versatilidad y capacidad para interactuar con el navegador, JavaScript permite crear experiencias web cautivadoras y en tiempo real. Desde interactividad hasta animaciones y desarrollo de aplicaciones complejas, JavaScript se convierte en la piedra angular del frontend y backend. Únete a nuestra comunidad de desarrolladores y desata todo el potencial de JavaScript para llevar tus proyectos web al siguiente nivel. ¡Embárcate en esta emocionante travesía para definir el futuro digital con tus habilidades en JavaScript!',
+            'description' => 'Adéntrate en el dinámico mundo de JavaScript, con su versatilidad y capacidad para interactuar con el navegador, JavaScript permite crear experiencias web cautivadoras y en tiempo real. Desde interactividad hasta animaciones y desarrollo de aplicaciones complejas, JavaScript se convierte en la piedra angular del frontend y backend. Únete a nuestra comunidad de desarrolladores y desata todo el potencial de JavaScript para llevar tus proyectos web al siguiente nivel. ¡Embárcate en esta emocionante travesía para definir el futuro digital con tus habilidades en JavaScript!',
             'price' => '570',
             'image' => 'images/javascript.png',
         ],
