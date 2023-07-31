@@ -10,7 +10,7 @@
 
 ### Sobre el proyecto
 
-El proyecto AkdemyProject es una aplicación que ofrece diferentes programas y convocatorias a sus usuarios. Los usuarios pueden registrarse en la academia y acceder a una variedad de funcionalidades según su rol. Los administradores tienen privilegios adicionales para gestionar convocatorias y solicitudes de inscripción.
+El proyecto Akdemy es una aplicación que ofrece diferentes programas y convocatorias a sus usuarios. Los usuarios pueden registrarse en la academia y acceder a una variedad de funcionalidades según su rol. Los administradores tienen privilegios adicionales para gestionar convocatorias y solicitudes de inscripción.
 
 Las funcionalidades disponibles para los usuarios en la plataforma AkdemyProject son diversas y están diseñadas para brindar una experiencia completa y enriquecedora. Una vez registrados en la academia, los usuarios tendrán acceso a su propio perfil, donde podrán visualizar y editar su información personal. Además, podrán explorar todos los programas académicos ofrecidos por la institución, obtener detalles sobre cada uno de ellos y tomar decisiones informadas sobre sus intereses educativos.
 
@@ -18,7 +18,7 @@ Una de las características destacadas para los usuarios es la posibilidad de ve
 
 Además, los usuarios tendrán un historial completo de sus convocatorias aceptadas, lo que les permitirá mantener un seguimiento detallado de su progreso académico y su participación en los diferentes programas. También tendrán la opción de eliminar su cuenta si así lo desean.
 
-En resumen, AkdemyProject ofrece a sus usuarios la posibilidad de aprovechar al máximo las oportunidades educativas que la academia proporciona, con un enfoque en la accesibilidad, la transparencia y la facilidad de uso. Los usuarios podrán gestionar su propia trayectoria académica y explorar una diversidad de programas y convocatorias que enriquecerán su desarrollo educativo y profesional.
+En resumen, Akdemy ofrece a sus usuarios la posibilidad de aprovechar al máximo las oportunidades educativas que la academia proporciona, con un enfoque en la accesibilidad, la transparencia y la facilidad de uso. Los usuarios podrán gestionar su propia trayectoria académica y explorar una diversidad de programas y convocatorias que enriquecerán su desarrollo educativo y profesional.
 
 
 !['diagrama'](./public/images/diagram.png)
