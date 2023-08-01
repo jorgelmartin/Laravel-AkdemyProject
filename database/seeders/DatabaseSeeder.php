@@ -24,6 +24,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class
         ]);
+        $this->call([
+            UserConvocationSeeder::class
+        ]);
         \App\Models\User::factory(5)->create();
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

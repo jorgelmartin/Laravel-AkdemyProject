@@ -20,6 +20,8 @@ class UserConvocationController extends Controller
     public function createUserConvocations(Request $request)
     {
         try {
+
+            
             $validator = Validator::make($request->all(), [
                 'convocation_id' => 'required',
                 'user_id' => 'required'
