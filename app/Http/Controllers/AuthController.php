@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\RequestVerificationEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,8 +10,6 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -37,15 +34,10 @@ class AuthController extends Controller
                 'surname' => $validData['surname'],
                 'email' => $validData['email'],
                 'password' => bcrypt($validData['password']),
-                'role_id' => 2,
-                'verification_token' => Str::uuid(), // Genera un token único para la verificación de correo electrónico
-                'verified_at' => null,
+                'role_id' => 2
             ]);
 
             $token = $newUser->createToken('apiToken')->plainTextToken;
-            $verificationUrl = url('/verify-email/' . $newUser->verification_token);
-
-            Mail::to($validData['email'])->send(new RequestVerificationEmail($verificationUrl));
 
             return response()->json([
                 'message' => 'User registered',
