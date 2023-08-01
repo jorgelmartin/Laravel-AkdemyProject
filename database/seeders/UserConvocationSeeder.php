@@ -25,6 +25,11 @@ class UserConvocationSeeder extends Seeder
                 'user_id' => '2',
                 'status' => '0'
             ],
+            [
+                'convocation_id' => '3',
+                'user_id' => '2',
+                'status' => '0'
+            ],
         ]);
     }
 }
