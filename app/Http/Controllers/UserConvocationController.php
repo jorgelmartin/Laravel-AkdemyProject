@@ -49,7 +49,7 @@ class UserConvocationController extends Controller
             $user->convocation()->attach($convocationId, ['status' => false]);
 
             // Enviar el correo electrónico
-            Mail::to($user->email)->send(new RequestCreated($user->name, $convocationId));
+            // Mail::to($user->email)->send(new RequestCreated($user->name, $convocationId));
 
             return response()->json([
                 'message' => 'Solicitud creada'
@@ -84,7 +84,7 @@ class UserConvocationController extends Controller
 
 
                 $user = User::find($convocationRequest->user_id);
-        Mail::to($user->email)->send(new RequestAccepted());
+        // Mail::to($user->email)->send(new RequestAccepted());
             // Aquí podrías realizar otras acciones adicionales relacionadas con la aceptación de la solicitud,
             // como notificar al usuario, enviar correos, etc.
 

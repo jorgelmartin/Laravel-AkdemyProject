@@ -37,6 +37,9 @@ class AuthController extends Controller
                 'role_id' => 2
             ]);
 
+            // Envía el correo electrónico de verificación
+            $newUser->sendEmailVerificationNotification();
+
             $token = $newUser->createToken('apiToken')->plainTextToken;
 
             return response()->json([

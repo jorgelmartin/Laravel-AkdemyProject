@@ -23,6 +23,12 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:sanctum');
 
+
+// Rutas protegidas que requieren verificación de correo electrónico
+Route::group(['middleware' => 'api', 'auth:sanctum', 'verified'], function () {
+    
+    // Por ejemplo, rutas para crear, editar o eliminar recursos específicos del usuario autenticado.
+});
 //CONVOCATION CONTROLLER
 Route::get('/convocation/getAll', [ConvocationController::class, 'getAllConvocations']);
 Route::post('/convocation/create', [ConvocationController::class, 'createConvocations'])->middleware(['auth:sanctum', 'isAdmin']);
