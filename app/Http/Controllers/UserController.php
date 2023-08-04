@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-    //
+    //UPDATE PROFILE FUNCTION
     public function updateProfile(Request $request)
     {
         try {
@@ -55,6 +55,7 @@ class UserController extends Controller
         }
     }
 
+    //DELETE MY ACCOUNT FUNCTION
     public function deleteMyAccount()
     {
         try {
@@ -73,6 +74,7 @@ class UserController extends Controller
         }
     }
 
+    //RESTORE ACCOUNT FUNCITON
     public function restoreAccount($id){
         try {
             User::withTrashed()->where('id',$id)->restore();
@@ -86,6 +88,8 @@ class UserController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    //GET ALL USERS FUNCTION
     public function getAllUsers()
     {
         try {

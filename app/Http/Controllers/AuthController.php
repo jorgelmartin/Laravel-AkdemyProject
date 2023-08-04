@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
+
+    //REGISTER FUNCTION
     public function register(Request $request)
     {
         try {
@@ -38,7 +40,7 @@ class AuthController extends Controller
             ]);
 
             // Envía el correo electrónico de verificación
-            $newUser->sendEmailVerificationNotification();
+            // $newUser->sendEmailVerificationNotification();
 
             $token = $newUser->createToken('apiToken')->plainTextToken;
 
@@ -98,6 +100,7 @@ class AuthController extends Controller
         }
     }
 
+    //PROFILE
     public function profile()
     {
         try {
@@ -117,6 +120,7 @@ class AuthController extends Controller
         }
     }
 
+    // LOGOUT
     public function logout(Request $request)
     {
         try {
@@ -133,16 +137,4 @@ class AuthController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-    // public function updateService(Request $request){
-    //     try {
-    //         $validator = Validator::make($request->all(),[
-    //             'name' => 'string',
-    //             'price' => 'float',
-    //             'description' => ''
-    //         ])
-    //     } catch (\Throwable $th) {
-
-    //     }
-    // }
 }

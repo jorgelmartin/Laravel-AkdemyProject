@@ -26,22 +26,15 @@ class ProgramController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    // public function show(Program $program)
-    // {
-    //     // Obtener el nombre de la imagen asociada al programa
-    //     $imageName = $program->images;
+    
 
-    //     // Pasar el nombre de la imagen a la vista y mostrar la vista
-    //     return view('program.show', compact('program', 'imageName'));
-    // }
+    //SENDING IMAGES 
     public function store(Request $request)
 {
-    // Validar el formulario y otros campos (nombre, descripción, precio, etc.)
-
     // Procesar la imagen cargada
     if ($request->hasFile('image') && $request->file('image')->isValid()) {
         $uploadedImage = $request->file('image');
-        $path = $uploadedImage->store('public/images'); // Guardar la imagen en la carpeta 'public/program_images'
+        $path = $uploadedImage->store('public/images'); 
 
         // Guardar la ruta de la imagen en la base de datos
         $program = new Program();
