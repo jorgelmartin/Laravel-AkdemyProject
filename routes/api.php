@@ -43,8 +43,3 @@ Route::get('/userConvo/getAccepted/{userId}', [UserConvocationController::class,
 
 //PROGRAMS CONTROLLER
 Route::get('/program/getAll', [ProgramController::class, 'getAllPrograms']);
-
-// Rutas protegidas que requieren verificación de correo electrónico
-Route::group(['middleware' => 'api', 'auth:sanctum', 'verified'], function () {
-    //  usuario autenticado.
-});

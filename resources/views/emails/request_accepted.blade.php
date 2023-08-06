@@ -27,6 +27,6 @@
     <p>Atentamente,<br>
         El equipo de Akdemy</p>
 
-    <p>Teléfono de contacto: +34-911 111 111</p>
+    <p>Teléfono de contacto: +99999999</p>
 </body>
 </html>

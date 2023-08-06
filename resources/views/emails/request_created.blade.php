@@ -9,9 +9,8 @@
     
     <p>Para avanzar con su solicitud, necesitamos que nos haga llegar por esta vía la siguiente documentación:</p>
     <ul>
-        <li>DNI/NIE (Por ambas caras).</li>
-        <li>Convocatoria a la cuál desea acceder.</li>
-        <li>Depósito bancario indicando su nombre y curso a la siguiente cuenta: ES82 2333 3333 3333 3333 3333.</li>
+        <li>Documento de identidad (Por ambas caras).</li>
+        <li>Depósito bancario indicando su nombre y curso a la siguiente cuenta: XXXX XXXX XXXX XXXX.</li>
     </ul>
     
     <p>Una vez que recibidos y validados todos los documentos solicitados, se le notificará por esta vía que ha procedido correctamente y lo podrá comprobar en la aplicación accediendo con su usuario y contraseña en "Mis cursos".</p>
@@ -23,6 +22,6 @@
     <p>Atentamente,<br>
     Akademy</p>
     
-    <p>Teléfono de contacto: +34-911 111 111</p>
+    <p>Teléfono de contacto: +99999999</p>
 </body>
 </html>
