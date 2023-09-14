@@ -12,5 +12,6 @@ class UserConvocation extends Model
         'user_id',
         'convocation_id',
         'status',
+        'comments'
     ];
 }

@@ -159,4 +159,38 @@ class UserConvocationController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    //GET ALL THE REQUEST
+    public function getAllInscriptions(Request $request)
+    {
+        try {
+            $allRequests = DB::table('user_convocation')->get();
+
+            //GET INFO FROM USER AND CONVOCATIONS
+            $requestsData = [];
+            foreach ($allRequests as $request) {
+                $user = User::find($request->user_id);
+                $convocation = Convocation::find($request->convocation_id);
+
+                if ($user && $convocation) {
+                    //GET THE PROGRAM ASSING TO THE CONVOCATION
+                    $program = Program::find($convocation->program_id);
+
+                    $requestsData[] = [
+                        'id' => $request->id,
+                        'status' => $request->status,
+                        'user' => $user,
+                        'convocation' => $convocation,
+                        'program' => $program,
+                    ];
+                }
+            }
+            return response()->json($requestsData);
+        } catch (\Throwable $th) {
+            Log::error('Error al obtener todas las solicitudes de convocatoria: ' . $th->getMessage());
+
+            return response()->json([
+                'message' => 'Error al obtener todas las solicitudes de convocatoria'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -39,6 +39,7 @@ Route::post('/userConvo/create', [UserConvocationController::class, 'createUserC
 Route::get('/userConvo/getPending', [UserConvocationController::class, 'getPendingUserRequests'])->middleware(['auth:sanctum', 'isAdmin']);
 Route::post('/userConvo/accept/{id}', [UserConvocationController::class, 'acceptUserRequest'])->middleware(['auth:sanctum', 'isAdmin']);
 Route::get('/userConvo/getAccepted/{userId}', [UserConvocationController::class, 'getMyAcceptedUserRequests'])->middleware(['auth:sanctum']);
+Route::get('/userConvo/getAllInscriptions', [UserConvocationController::class, 'getAllInscriptions'])->middleware(['auth:sanctum']);
 // Route::post('/convocation/join', [ConvocationController::class, 'joinConvocation']);
 
 //PROGRAMS CONTROLLER
