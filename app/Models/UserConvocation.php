@@ -11,7 +11,6 @@ class UserConvocation extends Model
     protected $fillable = [
         'user_id',
         'convocation_id',
-        'status',
-        'comments'
+        'status'
     ];
 }

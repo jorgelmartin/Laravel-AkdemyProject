@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('convocation_id');
             $table->unsignedBigInteger('user_id');
             $table->boolean('status')->default(false);
-            $table->text('comments')->nullable();
             $table->timestamps();
     
             $table->foreign('convocation_id')
