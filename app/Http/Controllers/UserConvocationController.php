@@ -7,12 +7,14 @@ namespace App\Http\Controllers;
 use App\Models\Convocation;
 use App\Models\Program;
 use App\Models\User;
+use App\Models\UserConvocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 // use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class UserConvocationController extends Controller
 {

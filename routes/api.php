@@ -40,6 +40,7 @@ Route::get('/userConvo/getPending', [UserConvocationController::class, 'getPendi
 Route::post('/userConvo/accept/{id}', [UserConvocationController::class, 'acceptUserRequest'])->middleware(['auth:sanctum', 'isAdmin']);
 Route::get('/userConvo/getAccepted/{userId}', [UserConvocationController::class, 'getMyAcceptedUserRequests'])->middleware(['auth:sanctum']);
 Route::get('/userConvo/getAllInscriptions', [UserConvocationController::class, 'getAllInscriptions'])->middleware(['auth:sanctum']);
+Route::post('/userConvo/addComment/{userConvocationId}', [UserConvocationController::class, 'addComment']);
 // Route::post('/convocation/join', [ConvocationController::class, 'joinConvocation']);
 
 //PROGRAMS CONTROLLER
