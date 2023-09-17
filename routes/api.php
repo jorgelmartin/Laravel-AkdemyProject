@@ -4,7 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConvocationController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\InscriptionController;
+use App\Http\Controllers\UserConvocationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,12 +35,11 @@ Route::put('/user/update', [UserController::class, 'updateProfile'])->middleware
 Route::get('/user/getAll', [UserController::class, 'getAllUsers'])->middleware(['auth:sanctum', 'isAdmin']);
 
 //USER CONVOCATION CONTROLLER
-Route::post('/userConvo/create', [InscriptionController::class, 'createUserConvocations'])->middleware('auth:sanctum');
-Route::get('/userConvo/getPending', [InscriptionController::class, 'getPendingUserRequests'])->middleware(['auth:sanctum', 'isAdmin']);
-Route::post('/userConvo/accept/{id}', [InscriptionController::class, 'acceptUserRequest'])->middleware(['auth:sanctum', 'isAdmin']);
-Route::get('/userConvo/getAccepted/{userId}', [InscriptionController::class, 'getMyAcceptedUserRequests'])->middleware(['auth:sanctum']);
-Route::get('/userConvo/getAllInscriptions', [InscriptionController::class, 'getAllInscriptions'])->middleware(['auth:sanctum']);
-Route::post('/userConvo/addComment/{userConvocationId}', [InscriptionController::class, 'addComment']);
+Route::post('/userConvo/create', [UserConvocationController::class, 'createUserConvocations'])->middleware('auth:sanctum');
+Route::get('/userConvo/getPending', [UserConvocationController::class, 'getPendingUserRequests'])->middleware(['auth:sanctum', 'isAdmin']);
+Route::post('/userConvo/accept/{id}', [UserConvocationController::class, 'acceptUserRequest'])->middleware(['auth:sanctum', 'isAdmin']);
+Route::get('/userConvo/getAccepted/{userId}', [UserConvocationController::class, 'getMyAcceptedUserRequests'])->middleware(['auth:sanctum']);
+Route::get('/userConvo/getAllInscriptions', [UserConvocationController::class, 'getAllInscriptions'])->middleware(['auth:sanctum']);
 // Route::post('/convocation/join', [ConvocationController::class, 'joinConvocation']);
 
 //PROGRAMS CONTROLLER

@@ -14,7 +14,7 @@ class InscriptionSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('inscriptions')->insert([
+        DB::table('user_convocation')->insert([
             [
                 'convocation_id' => '1',
                 'user_id' => '2',

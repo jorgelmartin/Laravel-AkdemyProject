@@ -9,14 +9,14 @@ class Convocation extends Model
 {
     use HasFactory;
     protected $fillable = [
-
+        // 'user_id',
         'program_id',
         'beginning',
         'schedule'
     ];
     
     public function user() {
-        return $this->belongsToMany(User::class, 'inscriptions', 'convocation_id', 'user_id');
+        return $this->belongsToMany(User::class, 'user_convocation', 'convocation_id', 'user_id');
         // return $this->belongsTo(User::class, 'user_id' );
     }
     public function program() {

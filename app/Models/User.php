@@ -53,7 +53,7 @@ class User extends Authenticatable
     }
     public function convocation() 
     {
-        return $this->belongsToMany(Convocation::class, 'inscriptions', 'user_id', 'convocation_id');
+        return $this->belongsToMany(Convocation::class, 'user_convocation', 'user_id', 'convocation_id');
         // return $this->belongsTo(Convocation::class, 'convocation_id' );
     }
 }

@@ -7,13 +7,16 @@ namespace App\Http\Controllers;
 use App\Models\Convocation;
 use App\Models\Program;
 use App\Models\User;
+// use App\Models\UserConvocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+// use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+// use Illuminate\Support\Facades\Auth;
 
-class InscriptionController extends Controller
+class UserConvocationController extends Controller
 {
     //CREATE USER CONVOCATIONS
     public function createUserConvocations(Request $request)
@@ -60,7 +63,7 @@ class InscriptionController extends Controller
     public function acceptUserRequest(Request $request, $requestId)
     {
         try {
-            $convocationRequest = DB::table('inscription')
+            $convocationRequest = DB::table('user_convocation')
                 ->where('id', $requestId)
                 ->first();
 
@@ -70,7 +73,7 @@ class InscriptionController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
 
-            DB::table('inscription')
+            DB::table('user_convocation')
                 ->where('id', $requestId)
                 ->update(['status' => true]);
 
@@ -91,7 +94,7 @@ class InscriptionController extends Controller
     {
         try {
             // Obtener todas las solicitudes pendientes (status = false) de la tabla intermedia
-            $pendingRequests = DB::table('inscription')
+            $pendingRequests = DB::table('user_convocation')
                 ->where('status', false)
                 ->get();
 
@@ -128,7 +131,7 @@ class InscriptionController extends Controller
     public function getMyAcceptedUserRequests(Request $request, $userId)
     {
         try {
-            $acceptedRequests = DB::table('inscription')
+            $acceptedRequests = DB::table('user_convocation')
                 ->where('status', true)
                 ->where('user_id', $userId)
                 ->get();
@@ -162,7 +165,7 @@ class InscriptionController extends Controller
     public function getAllInscriptions(Request $request)
     {
         try {
-            $allRequests = DB::table('inscription')->get();
+            $allRequests = DB::table('user_convocation')->get();
 
             //GET INFO FROM USER AND CONVOCATIONS
             $requestsData = [];
