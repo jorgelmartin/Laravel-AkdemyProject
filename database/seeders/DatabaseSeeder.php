@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class
         ]);
         $this->call([
-            UserConvocationSeeder::class
+            InscriptionSeeder::class
         ]);
         \App\Models\User::factory(5)->create();
         // \App\Models\User::factory()->create([

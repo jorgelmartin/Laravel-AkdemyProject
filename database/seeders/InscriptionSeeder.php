@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class UserConvocationSeeder extends Seeder
+class InscriptionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class UserConvocationSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('user_convocation')->insert([
+        DB::table('inscription')->insert([
             [
                 'convocation_id' => '1',
                 'user_id' => '2',
