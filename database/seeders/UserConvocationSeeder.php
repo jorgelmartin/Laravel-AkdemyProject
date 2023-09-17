@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class InscriptionSeeder extends Seeder
+class UserConvocationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
