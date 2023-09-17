@@ -14,7 +14,7 @@ El proyecto Akdemy es una aplicación que ofrece diferentes programas y convocat
 
 Los usuarios tendrán acceso a su propio perfil, donde podrán visualizar y editar su información personal. Además, podrán explorar todos los programas académicos ofrecidos por la institución, obtener detalles sobre cada uno de ellos y tomar decisiones sobre sus intereses educativos.
 
-Una de las características destacadas para los usuarios es la posibilidad de ver todas las convocatorias vigentes, lo que les permitirá estar al tanto de las oportunidades disponibles para inscribirse en los cursos de su elección. Los usuarios podrán realizar solicitudes de inscripción a las convocatorias deseadas y, una vez enviada la solicitud, se les informará la documentación necesaria para completar el proceso de inscripción. Los usuarios también podrán rastrear el estado de sus solicitudes en su perfil personal dentro de la plataforma brindándoles una comunicación efectiva y transparente durante todo el proceso.
+Los usuarios podrán realizar solicitudes de inscripción a las convocatorias deseadas y, una vez enviada la solicitud, se les informará la documentación necesaria para completar el proceso de inscripción. También podrán rastrear el estado de sus solicitudes en su perfil personal dentro de la plataforma brindándoles una comunicación efectiva y transparente durante todo el proceso.
 
 En resumen, Akdemy ofrece a sus usuarios la posibilidad de aprovechar al máximo las oportunidades educativas que la academia proporciona, con un enfoque en la accesibilidad, la transparencia y la facilidad de uso. 
 
