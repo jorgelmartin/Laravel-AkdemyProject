@@ -35,12 +35,12 @@ Route::put('/user/update', [UserController::class, 'updateProfile'])->middleware
 Route::get('/user/getAll', [UserController::class, 'getAllUsers'])->middleware(['auth:sanctum', 'isAdmin']);
 
 //USER CONVOCATION CONTROLLER
-Route::post('/userConvo/create', [inscriptionController::class, 'createUserConvocations'])->middleware('auth:sanctum');
-Route::get('/userConvo/getPending', [inscriptionController::class, 'getPendingUserRequests'])->middleware(['auth:sanctum', 'isAdmin']);
-Route::post('/userConvo/accept/{id}', [inscriptionController::class, 'acceptUserRequest'])->middleware(['auth:sanctum', 'isAdmin']);
-Route::get('/userConvo/getAccepted/{userId}', [inscriptionController::class, 'getMyAcceptedUserRequests'])->middleware(['auth:sanctum']);
-Route::get('/userConvo/getAllInscriptions', [inscriptionController::class, 'getAllInscriptions'])->middleware(['auth:sanctum']);
-Route::post('/userConvo/addComment/{userConvocationId}', [inscriptionController::class, 'addComment']);
+Route::post('/userConvo/create', [InscriptionController::class, 'createUserConvocations'])->middleware('auth:sanctum');
+Route::get('/userConvo/getPending', [InscriptionController::class, 'getPendingUserRequests'])->middleware(['auth:sanctum', 'isAdmin']);
+Route::post('/userConvo/accept/{id}', [InscriptionController::class, 'acceptUserRequest'])->middleware(['auth:sanctum', 'isAdmin']);
+Route::get('/userConvo/getAccepted/{userId}', [InscriptionController::class, 'getMyAcceptedUserRequests'])->middleware(['auth:sanctum']);
+Route::get('/userConvo/getAllInscriptions', [InscriptionController::class, 'getAllInscriptions'])->middleware(['auth:sanctum']);
+Route::post('/userConvo/addComment/{userConvocationId}', [InscriptionController::class, 'addComment']);
 // Route::post('/convocation/join', [ConvocationController::class, 'joinConvocation']);
 
 //PROGRAMS CONTROLLER
