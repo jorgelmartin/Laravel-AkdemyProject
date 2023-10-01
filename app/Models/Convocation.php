@@ -15,11 +15,16 @@ class Convocation extends Model
         'schedule'
     ];
     
-    public function user() {
+    public function user() 
+    {
         return $this->belongsToMany(User::class, 'user_convocation', 'convocation_id', 'user_id');
-        // return $this->belongsTo(User::class, 'user_id' );
     }
-    public function program() {
+    public function program() 
+    {
         return $this->belongsTo(Program::class);
+    }
+    public function message() 
+    {
+        return $this->hasMany(Message::class);
     }
 }

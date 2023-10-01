@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConvocationController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserConvocationController;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,7 +42,9 @@ Route::get('/userConvo/getPending', [UserConvocationController::class, 'getPendi
 Route::post('/userConvo/accept/{id}', [UserConvocationController::class, 'acceptUserRequest'])->middleware(['auth:sanctum', 'isAdmin']);
 Route::get('/userConvo/getAccepted/{userId}', [UserConvocationController::class, 'getMyAcceptedUserRequests'])->middleware(['auth:sanctum']);
 Route::get('/userConvo/getAllInscriptions', [UserConvocationController::class, 'getAllInscriptions'])->middleware(['auth:sanctum']);
-// Route::post('/convocation/join', [ConvocationController::class, 'joinConvocation']);
 
 //PROGRAMS CONTROLLER
 Route::get('/program/getAll', [ProgramController::class, 'getAllPrograms']);
+
+//MESSAGE CONTROLLER
+Route::post('/message/create', [MessageController::class, 'createMessage']);
