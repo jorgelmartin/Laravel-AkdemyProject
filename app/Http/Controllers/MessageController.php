@@ -91,11 +91,10 @@ class MessageController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
     public function getAllMessages()
     {
         try {
-            $messages = Message::with(['user', 'convocation', 'program'])->get();
+            $messages = Message::with(['user', 'convocation', 'convocation.program'])->get();
 
             return response()->json([
                 'message' => 'Mensajes obtenidos exitosamente',
