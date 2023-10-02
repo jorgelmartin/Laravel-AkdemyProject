@@ -95,7 +95,7 @@ class MessageController extends Controller
     public function getAllMessages()
     {
         try {
-            $messages = Message::with(['user', 'convocation'])->get();
+            $messages = Message::with(['user', 'convocation', 'program'])->get();
 
             return response()->json([
                 'message' => 'Mensajes obtenidos exitosamente',
