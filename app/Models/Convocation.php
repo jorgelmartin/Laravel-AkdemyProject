@@ -9,7 +9,6 @@ class Convocation extends Model
 {
     use HasFactory;
     protected $fillable = [
-        // 'user_id',
         'program_id',
         'beginning',
         'schedule'

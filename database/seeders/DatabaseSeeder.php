@@ -13,21 +13,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class
+            RoleSeeder::class,
+            ProgramSeeder::class,
+            ConvocationSeeder::class,
+            UserSeeder::class, 
+            UserConvocationSeeder::class,
+            MessageSeeder::class,
         ]);
-        $this->call([
-            ProgramSeeder::class
-        ]);
-        $this->call([
-            ConvocationSeeder::class
-        ]);
-        $this->call([
-            UserSeeder::class
-        ]);
-        $this->call([
-            UserConvocationSeeder::class
-        ]);
-        \App\Models\User::factory(5)->create();
+
+        \App\Models\User::factory(2)->create();
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
