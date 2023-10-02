@@ -15,11 +15,6 @@ class Message extends Model
         'message',
         'date'
     ];
-
-    public function setDateAttribute($value)
-    {
-        $this->attributes['date'] = Carbon::now();
-    }
     public function user()
     {
         return $this->belongsTo(User::class);
