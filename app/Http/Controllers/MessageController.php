@@ -17,7 +17,7 @@ class MessageController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required',
-                'convocation_id' => 'required',
+                'program_id' => 'required',
                 'message' => 'required',
                 'date' => 'required'
             ]);
@@ -30,7 +30,7 @@ class MessageController extends Controller
 
             $message = Message::create([
                 'user_id' => $validData['user_id'],
-                'convocation_id' => $validData['convocation_id'],
+                'program_id' => $validData['program_id'],
                 'message' => $validData['message'],
                 'date' => $validData['date']
             ]);
@@ -48,12 +48,47 @@ class MessageController extends Controller
         }
     }
 
+    public function messageReply(Request $request, $messageId)
+{
+    try {
+        // Validación de datos de entrada
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'program_id' => 'required',
+            'message' => 'required',
+            'date' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Verificar si el mensaje original existe
+        $parentMessage = Message::findOrFail($messageId);
+
+        // Crear la respuesta
+        Message::create([
+            'user_id' => $request->input('user_id'),
+            'program_id' => $request->input('program_id'),
+            'message' => $request->input('message'),
+            'date' => $request->input('date'),
+            'parent_id' => $messageId, // Establecer el parent_id para relacionar la respuesta al mensaje original
+        ]);
+
+        return redirect()->back()->with('success', 'Respuesta creada con éxito');
+    } catch (\Throwable $th) {
+        Log::error('Error al crear la respuesta: ' . $th->getMessage());
+
+        return redirect()->back()->with('error', 'Error al crear la respuesta');
+    }
+}
+
     public function editMessage(Request $request, $id)
     {
         try {
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required',
-                'convocation_id' => 'required',
+                'program_id' => 'required',
                 'message' => 'required',
                 'date' => 'required'
             ]);
@@ -73,7 +108,7 @@ class MessageController extends Controller
             }
 
             $message->user_id = $validData['user_id'];
-            $message->convocation_id = $validData['convocation_id'];
+            $message->program_id = $validData['program_id'];
             $message->message = $validData['message'];
             $message->date = $validData['date'];
 

@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('convocation_id');
+            $table->unsignedBigInteger('program_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('message');
+            $table->text('message');
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->date('date');
             
             $table->timestamps();
 
-            $table->foreign('convocation_id')
+            $table->foreign('program_id')
                 ->references('id')
-                ->on('convocations')
+                ->on('programs')
                 ->onDelete('cascade') 
                 ->onUpdate('cascade'); 
 
@@ -31,6 +32,12 @@ return new class extends Migration
                 ->on('users')
                 ->onDelete('cascade') 
                 ->onUpdate('cascade'); 
+
+                $table->foreign('parent_id')
+                ->references('id')
+                ->on('messages')
+                ->onDelete('cascade') 
+                ->onUpdate('cascade');
         });
     }
 

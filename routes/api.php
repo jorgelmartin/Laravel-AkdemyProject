@@ -51,4 +51,5 @@ Route::post('/message/create', [MessageController::class, 'createMessage'])->mid
 Route::put('/message/update/{id}', [MessageController::class, 'editMessage'])->middleware(['auth:sanctum']);
 Route::get('/message/getAll', [MessageController::class, 'getAllMessages'])->middleware(['auth:sanctum']);
 Route::delete('/message/delete/{id}', [MessageController::class, 'deleteMessage'])->middleware(['auth:sanctum', 'isAdmin']);
-Route::get('/message/messageByProgram/{id}', [MessageController::class, 'getMessagesByProgram'])->middleware(['auth:sanctum']);
+// Route::get('/message/messageByProgram/{id}', [MessageController::class, 'getMessagesByProgram'])->middleware(['auth:sanctum']);
+Route::post('/message/{commentId}/reply', [MessageController::class, 'messageReply'])->middleware(['auth:sanctum']);
