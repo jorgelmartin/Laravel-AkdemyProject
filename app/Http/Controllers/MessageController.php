@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
@@ -49,39 +50,39 @@ class MessageController extends Controller
     }
 
     public function messageReply(Request $request, $messageId)
-{
-    try {
-        // Validación de datos de entrada
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required',
-            'program_id' => 'required',
-            'message' => 'required',
-            'date' => 'required',
-        ]);
+    {
+        try {
+            // Validación de datos de entrada
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required',
+                'program_id' => 'required',
+                'message' => 'required',
+                'date' => 'required',
+            ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            // Verificar si el mensaje original existe
+            $parentMessage = Message::findOrFail($messageId);
+
+            // Crear la respuesta
+            Message::create([
+                'user_id' => $request->input('user_id'),
+                'program_id' => $request->input('program_id'),
+                'message' => $request->input('message'),
+                'date' => $request->input('date'),
+                'parent_id' => $messageId, // Establecer el parent_id para relacionar la respuesta al mensaje original
+            ]);
+
+            return redirect()->back()->with('success', 'Respuesta creada con éxito');
+        } catch (\Throwable $th) {
+            Log::error('Error al crear la respuesta: ' . $th->getMessage());
+
+            return redirect()->back()->with('error', 'Error al crear la respuesta');
         }
-
-        // Verificar si el mensaje original existe
-        $parentMessage = Message::findOrFail($messageId);
-
-        // Crear la respuesta
-        Message::create([
-            'user_id' => $request->input('user_id'),
-            'program_id' => $request->input('program_id'),
-            'message' => $request->input('message'),
-            'date' => $request->input('date'),
-            'parent_id' => $messageId, // Establecer el parent_id para relacionar la respuesta al mensaje original
-        ]);
-
-        return redirect()->back()->with('success', 'Respuesta creada con éxito');
-    } catch (\Throwable $th) {
-        Log::error('Error al crear la respuesta: ' . $th->getMessage());
-
-        return redirect()->back()->with('error', 'Error al crear la respuesta');
     }
-}
 
     public function editMessage(Request $request, $id)
     {
@@ -91,10 +92,11 @@ class MessageController extends Controller
                 'program_id' => 'required',
                 'message' => 'required',
                 'date' => 'required'
+                // Agrega aquí otras reglas de validación según tus necesidades
             ]);
 
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 400);
+                return response()->json($validator->errors(), 400); // 400 Bad Request
             }
 
             $validData = $validator->validated();
@@ -104,32 +106,71 @@ class MessageController extends Controller
             if (!$message) {
                 return response()->json([
                     'message' => 'Mensaje no encontrado'
-                ], Response::HTTP_NOT_FOUND);
+                ], 404); // 404 Not Found
             }
 
-            $message->user_id = $validData['user_id'];
-            $message->program_id = $validData['program_id'];
-            $message->message = $validData['message'];
-            $message->date = $validData['date'];
+            // Verificar la autorización para editar
+            if ($message->user_id !== Auth::id()) {
+                return response()->json([
+                    'message' => 'No tienes permisos para editar este mensaje'
+                ], 403); // 403 Forbidden
+            }
 
-            $message->save();
+            // Resto de la lógica de edición aquí...
 
-            return response()->json([
-                'message' => 'Message updated',
-                'data' => $message
-            ]);
         } catch (\Throwable $th) {
-            Log::error('Error updating message ' . $th->getMessage());
+            Log::error('Error al actualizar mensaje: ' . $th->getMessage());
 
             return response()->json([
-                'message' => 'Error updating message'
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                'message' => 'Error al actualizar mensaje'
+            ], 500); // 500 Internal Server Error
         }
     }
+
+    public function editResponse(Request $request, $id)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required',
+                'program_id' => 'required',
+                'message' => 'required',
+                'date' => 'required'
+                // Agrega aquí otras reglas de validación según tus necesidades
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 400); // 400 Bad Request
+            }
+
+            $validData = $validator->validated();
+
+            $message = Message::find($id); // Utiliza Message en lugar de Response
+
+            if (!$message) {
+                return response()->json([
+                    'message' => 'Mensaje no encontrado'
+                ], 404); // 404 Not Found
+            }
+
+            // Verificar la autorización para editar
+            if ($message->user_id !== Auth::id()) {
+                return response()->json([
+                    'message' => 'No tienes permisos para editar este mensaje'
+                ], 403); // 403 Forbidden
+            }
+        } catch (\Throwable $th) {
+            Log::error('Error al actualizar mensaje: ' . $th->getMessage());
+
+            return response()->json([
+                'message' => 'Error al actualizar mensaje'
+            ], 500); // 500 Internal Server Error
+        }
+    }
+
     public function getAllMessages()
     {
         try {
-            $messages = Message::with(['user', 'convocation', 'convocation.program'])->get();
+            $messages = Message::with(['user', 'program', 'responses', 'messageParent'])->get();
 
             return response()->json([
                 'message' => 'Mensajes obtenidos exitosamente',
@@ -169,40 +210,30 @@ class MessageController extends Controller
         }
     }
 
-    public function getMessagesByProgram($program_id)
+    public function deleteResponse($id)
     {
         try {
-            $program = Program::find($program_id);
+            $response = Message::find($id);
 
-            if (!$program) {
+            if (!$response) {
                 return response()->json([
-                    'message' => 'Programa no encontrado'
+                    'message' => 'Response not found'
                 ], Response::HTTP_NOT_FOUND);
             }
 
-            // Accede a las convocatorias relacionadas
-            $convocations = $program->convocations;
+            // Recursivamente eliminar respuestas hijas
+            $this->deleteChildResponses($response);
 
-            // Inicializa un arreglo para almacenar los mensajes
-            $messages = [];
-
-            // Bucle for para obtener los mensajes relacionados
-            for ($i = 0; $i < count($convocations); $i++) {
-                $messages[] = $convocations[$i]->messages;
-            }
-
-            // Une todos los mensajes en un solo arreglo
-            $allMessages = collect($messages)->flatten();
+            $response->delete();
 
             return response()->json([
-                'message' => 'Mensajes obtenidos exitosamente',
-                'data' => $allMessages
+                'message' => 'Respuesta y respuestas hijas borradas exitosamente'
             ]);
         } catch (\Throwable $th) {
-            Log::error('Error al obtener los mensajes por programa: ' . $th->getMessage());
+            Log::error('Error al eliminar la respuesta: ' . $th->getMessage());
 
             return response()->json([
-                'message' => 'Error al obtener los mensajes por programa'
+                'message' => 'Error al eliminar la respuesta'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
