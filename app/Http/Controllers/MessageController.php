@@ -61,14 +61,14 @@ class MessageController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
+                return response()->json(['error' => 'Error de validación', 'errors' => $validator->errors()], 400);
             }
 
             // Verificar si el mensaje original existe
             $parentMessage = Message::findOrFail($messageId);
 
             // Crear la respuesta
-            Message::create([
+            $responseMessage = Message::create([
                 'user_id' => $request->input('user_id'),
                 'program_id' => $request->input('program_id'),
                 'message' => $request->input('message'),
@@ -76,14 +76,32 @@ class MessageController extends Controller
                 'parent_id' => $messageId, // Establecer el parent_id para relacionar la respuesta al mensaje original
             ]);
 
-            return redirect()->back()->with('success', 'Respuesta creada con éxito');
+            return response()->json(['message' => 'Respuesta creada con éxito', 'data' => $responseMessage], 201);
         } catch (\Throwable $th) {
             Log::error('Error al crear la respuesta: ' . $th->getMessage());
 
-            return redirect()->back()->with('error', 'Error al crear la respuesta');
+            return response()->json(['error' => 'Error interno del servidor', 'message' => 'Error al crear la respuesta'], 500);
         }
     }
 
+
+    public function getResponses($messageId)
+    {
+        try {
+            // Buscar el mensaje original
+            $parentMessage = Message::findOrFail($messageId);
+
+            // Obtener todas las respuestas relacionadas con el mensaje original
+            $responses = Message::where('parent_id', $messageId)->get();
+
+            return response()->json(['data' => $responses]);
+        } catch (\Throwable $th) {
+            Log::error('Error al obtener las respuestas: ' . $th->getMessage());
+
+            return response()->json(['error' => 'Error interno del servidor', 'message' => 'Error al obtener las respuestas'], 500);
+        }
+    }
+    
     public function editMessage(Request $request, $id)
     {
         try {
