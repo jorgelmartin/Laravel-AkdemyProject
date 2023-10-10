@@ -52,5 +52,5 @@ Route::put('/message/update/{id}', [MessageController::class, 'editMessage'])->m
 Route::get('/message/getAll', [MessageController::class, 'getAllMessages'])->middleware(['auth:sanctum']);
 Route::delete('/message/delete/{id}', [MessageController::class, 'deleteMessage'])->middleware(['auth:sanctum']);
 Route::post('/message/{id}/reply', [MessageController::class, 'messageReply'])->middleware(['auth:sanctum']);
-Route::post('/message/{id}/responses', [MessageController::class, 'getResponses'])->middleware(['auth:sanctum']);
+Route::get('/message/{id}/responses', [MessageController::class, 'getResponses'])->middleware(['auth:sanctum']);
 Route::delete('/messages/deleteReply/{id}', [MessageController::class, 'deleteResponse'])->middleware(['auth:sanctum']);
