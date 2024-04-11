@@ -35,7 +35,6 @@ class UserConvocationController extends Controller
             $user = User::findOrFail($validData['user_id']);
             $convocationId = $validData['convocation_id'];
 
-            // Verificar si ya existe una relación entre el usuario y la convocatoria
             $existingRelation = $user->convocation()->where('convocation_id', $convocationId)->exists();
 
             if ($existingRelation) {
@@ -44,12 +43,11 @@ class UserConvocationController extends Controller
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            // Crear el registro en la tabla intermedia con 'status' establecido en 'false'
             $user->convocation()->attach($convocationId, ['status' => false]);
 
             return response()->json([
                 'message' => 'Solicitud creada'
-            ]);
+            ], Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             Log::error('Error al crear la solicitud ' . $th->getMessage());
 
@@ -93,7 +91,7 @@ class UserConvocationController extends Controller
     public function getPendingUserRequests(Request $request)
     {
         try {
-            // Obtener todas las solicitudes pendientes (status = false) de la tabla intermedia
+            // Obtener todas las solicitudes pendientes (status = false) 
             $pendingRequests = DB::table('user_convocation')
                 ->where('status', false)
                 ->get();

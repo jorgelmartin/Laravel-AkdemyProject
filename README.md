@@ -10,13 +10,7 @@
 
 ### Sobre el proyecto:
 
-El proyecto Akdemy es una aplicación que ofrece diferentes programas y convocatorias a sus usuarios. Los usuarios pueden registrarse en la academia y acceder a una variedad de funcionalidades según su rol. Los administradores tienen privilegios adicionales para gestionar convocatorias y solicitudes de inscripción.
-
-Los usuarios tendrán acceso a su propio perfil, donde podrán visualizar y editar su información personal. Además, podrán explorar todos los programas académicos ofrecidos por la institución, obtener detalles sobre cada uno de ellos y tomar decisiones sobre sus intereses educativos.
-
-Los usuarios podrán realizar solicitudes de inscripción a las convocatorias deseadas y, una vez enviada la solicitud, se les informará la documentación necesaria para completar el proceso de inscripción. También podrán rastrear el estado de sus solicitudes en su perfil personal dentro de la plataforma brindándoles una comunicación efectiva y transparente durante todo el proceso.
-
-En resumen, Akdemy ofrece a sus usuarios la posibilidad de aprovechar al máximo las oportunidades educativas que la academia proporciona, con un enfoque en la accesibilidad, la transparencia y la facilidad de uso. 
+Este repositorio contiene el backend de una aplicación diseñada para la visualización de programas, gestión de perfiles de usuario, convocatorias e intercambio de mensajes. Se proporcionan endpoints para realizar dichas operaciones, además de funciones de autenticación.
 
 !['diagrama'](./public/images/diagram.png)
 
@@ -40,7 +34,7 @@ En resumen, Akdemy ofrece a sus usuarios la posibilidad de aprovechar al máximo
 * GET - Perfil.
 * GET - Ver todos los usuarios (Admin).
 * PUT - Editar perfil.
-* DELETE - Borrar cuenta.
+* DELETE - Borrar cuenta(desactivar).
 
 #### Convocatorias
 
@@ -48,7 +42,7 @@ En resumen, Akdemy ofrece a sus usuarios la posibilidad de aprovechar al máximo
 * POST - Crear convocatorias(admin)
 * PUT - Modificar convocatorias(admin).
 
-#### Usuario convocatorias
+#### Usuario convocatorias (Inscripciónes)
 
 * POST - Crear solicitud inscripción(user).
 * GET - Ver solicitudes pendientes(admin).
@@ -58,6 +52,13 @@ En resumen, Akdemy ofrece a sus usuarios la posibilidad de aprovechar al máximo
 #### Programas
 
 * GET - Ver todos los programas.
+
+#### Mensajería
+
+* POST - Crear mensaje.
+* POST - Crear respuesta.
+* GET - Ver todos los mensajes.
+* DELETE - Borrar mensaje.
 
 ### Agradecimientos:
 

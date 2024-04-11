@@ -34,7 +34,6 @@ class ConvocationController extends Controller
     public function createConvocations(Request $request)
     {
         try {
-            // Verificar si el usuario tiene el rol de administrador (role: 1)
             if (auth()->user()->role_id !== 1) {
                 return response()->json(['message' => 'No tienes permiso para crear convocatorias'], 403);
             }
@@ -63,7 +62,7 @@ class ConvocationController extends Controller
             return response()->json([
                 'message' => 'Convocatoria creada',
                 'data' => $convocation
-            ]);
+            ], Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             Log::error('Error al crear la convocatoria ' . $th->getMessage());
 
@@ -77,7 +76,6 @@ class ConvocationController extends Controller
     public function updateConvocations(Request $request, $convocationId)
     {
         try {
-            // Verificar role
             if (auth()->user()->role_id !== 1) {
                 return response()->json(['message' => 'No tienes permiso para actualizar convocatorias'], 403);
             }
@@ -97,10 +95,8 @@ class ConvocationController extends Controller
             // Convertir la fecha utilizando Carbon
             $beginning = Carbon::parse($validData['beginning'])->toDateTimeString();
 
-            // Buscar la convocatoria existente por su ID
             $convocation = Convocation::findOrFail($convocationId);
 
-            // Actualizar los datos de la convocatoria
             $convocation->update([
                 'program_id' => $validData['program_id'],
                 'beginning' => $beginning,
@@ -140,6 +136,7 @@ class ConvocationController extends Controller
                     'message' => 'Convocation not found'
                 ], Response::HTTP_NOT_FOUND);
             }
+            
             // Verificar si el usuario ya está unido a la convocatoria.
             $existingUser = $convocation->user->find($userId);
             if ($existingUser) {
@@ -160,7 +157,7 @@ class ConvocationController extends Controller
             return response()->json([
                 'message' => 'Convocation join request sent',
                 'data' => $convocation
-            ]);
+            ], Response::HTTP_OK);
         } catch (\Throwable $th) {
             Log::error('Error joining convocation ' . $th->getMessage());
             return response()->json([

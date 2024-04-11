@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -15,10 +16,10 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'string',
-                'surname' => 'string',
-                'email' => 'string',
-                'password' => 'string',
+                'name' => ['string', 'max:40', 'regex:/^[a-zA-Z ]+$/'],
+                'surname' => ['string', 'max:40', 'regex:/^[a-zA-Z ]+$/'],
+                'email' => ['email', 'unique:users,email', 'max:50'],
+                'password' => [Password::min(8)->mixedCase()->numbers()],
                 'id' => 'required'
             ]);
             if ($validator->fails()) {
