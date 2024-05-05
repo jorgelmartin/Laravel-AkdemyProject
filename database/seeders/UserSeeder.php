@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Encriptar la contraseña usando bcrypt()
+        //Encrypt password using bcrypt()
         $hashedPassword = Hash::make('Hola1234');
 
         DB::table('users')->insert([
@@ -78,7 +78,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Maria',
                 'surname' => 'Manuela',
-                'email' => 'mari@manu.com',
+                'email' => 'mari@user.com',
                 'password' => $hashedPassword, 
                 'role_id' => '2',
                 'email_verified_at' => now(),

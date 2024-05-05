@@ -50,7 +50,7 @@ class ConvocationController extends Controller
 
             $validData = $validator->validated();
 
-            // Convertir el campo "beginning" a formato de fecha válido
+            // CONVERT 'beginning' IN VALID DATA
             $beginning = Carbon::parse($validData['beginning'])->toDateTimeString();
 
             $convocation = Convocation::create([
@@ -92,7 +92,7 @@ class ConvocationController extends Controller
 
             $validData = $validator->validated();
 
-            // Convertir la fecha utilizando Carbon
+            // CONVERT 'beginning' IN VALID DATA
             $beginning = Carbon::parse($validData['beginning'])->toDateTimeString();
 
             $convocation = Convocation::findOrFail($convocationId);
@@ -112,56 +112,6 @@ class ConvocationController extends Controller
 
             return response()->json([
                 'message' => 'Error updating convocation'
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    //JOIN CONVOCATION
-    public function joinConvocation(Request $request)
-    {
-        try {
-            $validator = Validator::make($request->all(), [
-                'id' => 'required'
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json($validator->errors(), 400);
-            }
-
-            $validData = $validator->validated();
-            $userId = auth()->user()->id;
-            $convocation = Convocation::find($validData['id']);
-            if ($convocation === null) {
-                return response()->json([
-                    'message' => 'Convocation not found'
-                ], Response::HTTP_NOT_FOUND);
-            }
-            
-            // Verificar si el usuario ya está unido a la convocatoria.
-            $existingUser = $convocation->user->find($userId);
-            if ($existingUser) {
-                if ($existingUser->pivot->pending) {
-                    return response()->json([
-                        'message' => 'User already has a pending join request for the convocation'
-                    ], Response::HTTP_BAD_REQUEST);
-                } else {
-                    return response()->json([
-                        'message' => 'User is already joined to the convocation'
-                    ], Response::HTTP_BAD_REQUEST);
-                }
-            }
-
-            // Agregar una solicitud pendiente para unir al usuario a la convocatoria.
-            $convocation->user()->attach($userId, ['pending' => true]);
-
-            return response()->json([
-                'message' => 'Convocation join request sent',
-                'data' => $convocation
-            ], Response::HTTP_OK);
-        } catch (\Throwable $th) {
-            Log::error('Error joining convocation ' . $th->getMessage());
-            return response()->json([
-                'message' => 'Error joining convocation'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

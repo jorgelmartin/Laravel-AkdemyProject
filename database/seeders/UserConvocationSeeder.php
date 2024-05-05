@@ -51,7 +51,7 @@ class UserConvocationSeeder extends Seeder
                 'status' => '1'
             ],
             [
-                'convocation_id' => '1',
+                'convocation_id' => '4',
                 'user_id' => '3',
                 'status' => '1'
             ],

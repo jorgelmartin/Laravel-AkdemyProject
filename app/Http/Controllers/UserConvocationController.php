@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
-// use App\Mail\RequestAccepted;
-// use App\Mail\RequestCreated;
 use App\Models\Convocation;
 use App\Models\Program;
 use App\Models\User;
-// use App\Models\UserConvocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-// use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
-// use Illuminate\Support\Facades\Auth;
 
 class UserConvocationController extends Controller
 {
@@ -91,19 +86,19 @@ class UserConvocationController extends Controller
     public function getPendingUserRequests(Request $request)
     {
         try {
-            // Obtener todas las solicitudes pendientes (status = false) 
+            // GET PENDING REQUEST (status = false) 
             $pendingRequests = DB::table('user_convocation')
                 ->where('status', false)
                 ->get();
 
-            // Obtener la información de los usuarios y convocatorias relacionadas
+            // GET INFO ABOUT USERS & CONVOCATIONS RELATED
             $requestsData = [];
             foreach ($pendingRequests as $request) {
                 $user = User::find($request->user_id);
                 $convocation = Convocation::find($request->convocation_id);
 
                 if ($user && $convocation) {
-                    // Obtener el programa relacionado con la convocatoria
+                    // GET PROGRAM RELATED TO CONVOCATION
                     $program = Program::find($convocation->program_id);
 
                     $requestsData[] = [
