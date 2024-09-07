@@ -17,18 +17,20 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->boolean('status')->default(false);
             $table->timestamps();
-    
+
             $table->foreign('convocation_id')
                 ->references('id')
                 ->on('convocations')
-                ->onDelete('cascade') 
-                ->onUpdate('cascade'); 
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade') 
-                ->onUpdate('cascade'); 
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->timestamps();
         });
     }
 

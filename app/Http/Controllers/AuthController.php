@@ -23,6 +23,18 @@ class AuthController extends Controller
                 'surname' => ['required', 'string', 'max:40', 'regex:/^[a-zA-Z ]+$/'],
                 'email' => ['required', 'email', 'unique:users,email', 'max:50'],
                 'password' => ['required', Password::min(8)->mixedCase()->numbers()]
+            ], [
+                'name.required' => 'Name is required.',
+                'name.max' => 'Name can have a maximum of 40 characters.',
+                'name.regex' => 'Name can only contain letters and spaces.',
+                'surname.required' => 'Surname is required.',
+                'surname.max' => 'Surname can have a maximum of 40 characters.',
+                'surname.regex' => 'Surname can only contain letters and spaces.',
+                'email.required' => 'Email is required.',
+                'email.email' => 'Email is not valid.',
+                'email.unique' => 'Email is already registered.',
+                'password.required' => 'Password is required.',
+                'password.min' => 'Password must be at least 8 characters long.',
             ]);
 
             if ($validator->fails()) {
@@ -38,9 +50,6 @@ class AuthController extends Controller
                 'password' => bcrypt($validData['password']),
                 'role_id' => 2
             ]);
-
-            // Envía el correo electrónico de verificación
-            // $newUser->sendEmailVerificationNotification();
 
             $token = $newUser->createToken('apiToken')->plainTextToken;
 
@@ -58,8 +67,6 @@ class AuthController extends Controller
         }
     }
 
-
-
     //LOGIN
     public function login(Request $request)
     {
@@ -68,20 +75,19 @@ class AuthController extends Controller
                 'email' => 'required|email',
                 'password' => 'required'
             ], [
-                'email' => 'Email or password are invalid',
-                'password' => 'Email or password are invalid'
+                'email.required' => 'Email or password are invalid',
+                'email.email' => 'Email or password are invalid',
+                'password.required' => 'Email or password are invalid'
             ]);
+    
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 400);
             }
+    
             $validData = $validator->validated();
             $user = User::where('email', $validData['email'])->first();
-            if (!$user) {
-                return response()->json([
-                    'message' => 'Email or password are invalid'
-                ], Response::HTTP_FORBIDDEN);
-            }
-            if (!Hash::check($validData['password'], $user->password)) {
+    
+            if (!$user || !Hash::check($validData['password'], $user->password)) {
                 return response()->json([
                     'message' => 'Email or password are invalid'
                 ], Response::HTTP_FORBIDDEN);
